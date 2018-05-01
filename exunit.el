@@ -4,7 +4,7 @@
 
 ;; Author: Anantha kumaran <ananthakumaran@gmail.com>
 ;; URL: http://github.com/ananthakumaran/exunit.el
-;; Version: 2.8.3.1
+;; Version: 0.1
 ;; Keywords: elixir exunit
 ;; Package-Requires: ((dash "2.10.0") (s "1.11.0"))
 
