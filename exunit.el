@@ -34,6 +34,11 @@
 
 ;;; Private
 
+(defcustom exunit-mix-test-default-options '()
+  "List of options that gets passed to the mix test command."
+  :type '(repeat string)
+  :group 'exunit)
+
 (defmacro exunit-def-permanent-buffer-local (name &optional init-value)
   "Declare NAME as buffer local variable."
   `(progn
@@ -88,7 +93,7 @@
 (defun exunit-compile (args)
   (let ((default-directory (exunit-project-root)))
     (compile
-     (s-join " " (-concat '("mix" "test") args))
+     (s-join " " (-concat '("mix" "test") exunit-mix-test-default-options args))
      'exunit-compilation-mode)))
 
 ;;; Public
