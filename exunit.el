@@ -39,6 +39,12 @@
   :type '(repeat string)
   :group 'exunit)
 
+(defcustom exunit-environment '()
+  "List of environment variables used when running mix test.
+Each element should be a string of the form ENVVARNAME=VALUE."
+  :type '(repeat (string :tag "ENVVARNAME=VALUE"))
+  :group 'exunit)
+
 (defmacro exunit-def-permanent-buffer-local (name &optional init-value)
   "Declare NAME as buffer local variable."
   `(progn
@@ -91,7 +97,8 @@
 
 
 (defun exunit-compile (args)
-  (let ((default-directory (exunit-project-root)))
+  (let ((default-directory (exunit-project-root))
+        (compilation-environment exunit-environment))
     (compile
      (s-join " " (-concat '("mix" "test") exunit-mix-test-default-options args))
      'exunit-compilation-mode)))
