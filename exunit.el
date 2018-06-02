@@ -70,6 +70,7 @@ Each element should be a string of the form ENVVARNAME=VALUE."
   (let ((project-name (exunit-project-name)))
     (cond
      ((member dep '("elixir" "stdlib")) filename)
+     ((s-ends-with? "Error" dep) filename)
      ((string= dep project-name) filename)
      (t (s-join "/" (list "deps" dep filename))))))
 
