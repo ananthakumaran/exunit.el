@@ -100,7 +100,7 @@ Each element should be a string of the form ENVVARNAME=VALUE."
 
 (defvar exunit-compilation-error-regexp-alist-alist
   '((elixir-warning "warning: [^\n]*\n +\\([0-9A-Za-z@_./:-]+\\.exs?\\):\\([0-9]+\\)" 1 2 nil 1 1)
-    (elixir-error " +\\(\\(?:([0-9A-Za-z_-]*) \\)?[0-9A-Za-z@_./:-]+\\.\\(ex\\|exs\\|erl\\)\\):\\([0-9]+\\):?" 1 2 nil 2 1)))
+    (elixir-error " +\\(\\(?:([0-9A-Za-z_-]*) \\)?[0-9A-Za-z@_./:-]+\\.\\(?:ex\\|exs\\|erl\\)\\):\\([0-9]+\\):?" 1 2 nil 2 1)))
 (defvar exunit-compilation-error-regexp-alist
   (mapcar 'car exunit-compilation-error-regexp-alist-alist))
 
