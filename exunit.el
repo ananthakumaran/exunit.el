@@ -67,12 +67,18 @@ Each element should be a string of the form ENVVARNAME=VALUE."
   (file-name-nondirectory (directory-file-name (exunit-project-root))))
 
 (defun exunit-dependency-filename (dep filename)
-  (let ((project-name (exunit-project-name)))
+  (let ((project-name (exunit-project-name))
+        (dep-file (s-join "/" (list "deps" dep filename)))
+        (umbrella-app-file (s-join "/" (list exunit-project-root ".." dep filename)))
+        (umbrella-dep-file (s-join "/" (list exunit-project-root ".." ".." "deps" dep filename))))
     (cond
      ((member dep '("elixir" "stdlib")) filename)
      ((s-ends-with? "Error" dep) filename)
      ((string= dep project-name) filename)
-     (t (s-join "/" (list "deps" dep filename))))))
+     ((file-exists-p dep-file) dep-file)
+     ((file-exists-p umbrella-app-file) umbrella-app-file)
+     ((file-exists-p umbrella-dep-file) umbrella-dep-file)
+     (t filename))))
 
 (defun exunit-parse-error-filename (filename)
   (let ((match (s-match "(\\([^)]*\\)) \\(.*\\)" filename)))
@@ -90,6 +96,13 @@ Each element should be a string of the form ENVVARNAME=VALUE."
   (toggle-read-only)
   (ansi-color-apply-on-region compilation-filter-start (point))
   (toggle-read-only))
+
+
+(defvar exunit-compilation-error-regexp-alist-alist
+  '((elixir-warning "warning: [^\n]*\n +\\([0-9A-Za-z@_./:-]+\\.exs?\\):\\([0-9]+\\)" 1 2 nil 1 1)
+    (elixir-error " +\\(\\(?:([0-9A-Za-z_-]*) \\)?[0-9A-Za-z@_./:-]+\\.\\(ex\\|exs\\|erl\\)\\):\\([0-9]+\\):?" 1 2 nil 2 1)))
+(defvar exunit-compilation-error-regexp-alist
+  (mapcar 'car exunit-compilation-error-regexp-alist-alist))
 
 (define-compilation-mode exunit-compilation-mode "ExUnit Compilation"
   "Compilation mode for ExUnit output."
