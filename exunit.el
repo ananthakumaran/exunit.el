@@ -62,7 +62,7 @@ Each element should be a string of the form ENVVARNAME=VALUE."
    exunit-project-root
    (let ((root (locate-dominating-file default-directory "mix.exs")))
      (unless root
-       (error "Couldn't locate project root folder.  Make sure the current file is inside a the project"))
+       (error "Couldn't locate project root folder.  Make sure the current file is inside a project"))
      (setq exunit-project-root (expand-file-name root))
      exunit-project-root)))
 
