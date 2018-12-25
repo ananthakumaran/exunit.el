@@ -5,8 +5,8 @@
 ;; Author: Anantha kumaran <ananthakumaran@gmail.com>
 ;; URL: http://github.com/ananthakumaran/exunit.el
 ;; Version: 0.1
-;; Keywords: elixir exunit
-;; Package-Requires: ((dash "2.10.0") (s "1.11.0"))
+;; Keywords: processes elixir exunit
+;; Package-Requires: ((dash "2.10.0") (s "1.11.0") (emacs "24.3"))
 
 ;; This program is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
@@ -24,6 +24,9 @@
 ;; This file is not part of GNU Emacs.
 
 ;;; Commentary:
+
+;; A minor mode that provides commands to run ExUnit tests.  The output
+;; is properly syntax highlighted and stacktraces are navigatable
 
 ;;; Code:
 
@@ -59,7 +62,7 @@ Each element should be a string of the form ENVVARNAME=VALUE."
    exunit-project-root
    (let ((root (locate-dominating-file default-directory "mix.exs")))
      (unless root
-       (error "Couldn't locate project root folder. Make sure the current file is inside a the project."))
+       (error "Couldn't locate project root folder.  Make sure the current file is inside a the project"))
      (setq exunit-project-root (expand-file-name root))
      exunit-project-root)))
 
@@ -97,7 +100,6 @@ Each element should be a string of the form ENVVARNAME=VALUE."
   (ansi-color-apply-on-region compilation-filter-start (point))
   (toggle-read-only))
 
-
 (defvar exunit-compilation-error-regexp-alist-alist
   '((elixir-warning "warning: [^\n]*\n +\\([0-9A-Za-z@_./:-]+\\.exs?\\):\\([0-9]+\\)" 1 2 nil 1 1)
     (elixir-error " +\\(\\(?:([0-9A-Za-z_-]*) \\)?[0-9A-Za-z@_./:-]+\\.\\(?:ex\\|exs\\|erl\\)\\):\\([0-9]+\\):?" 1 2 nil 2 1)))
@@ -109,7 +111,6 @@ Each element should be a string of the form ENVVARNAME=VALUE."
   (setq compilation-parse-errors-filename-function #'exunit-parse-error-filename)
   (add-hook 'compilation-filter-hook 'exunit-colorize-compilation-buffer nil t))
 
-
 (defun exunit-compile (args)
   (let ((default-directory (exunit-project-root))
         (compilation-environment exunit-environment))
@@ -119,15 +120,21 @@ Each element should be a string of the form ENVVARNAME=VALUE."
 
 ;;; Public
 
+;;;###autoload
 (defun exunit-verify-all ()
+  "Run all the tests in the current project."
   (interactive)
   (exunit-compile '()))
 
+;;;###autoload
 (defun exunit-verify-single ()
+  "Run all the tests in the current buffer."
   (interactive)
   (exunit-compile (list (exunit-test-filename-line-number))))
 
+;;;###autoload
 (defun exunit-verify ()
+  "Run the test under the point."
   (interactive)
   (exunit-compile (list (exunit-test-filename))))
 
