@@ -96,9 +96,8 @@ Each element should be a string of the form ENVVARNAME=VALUE."
   (concat (exunit-test-filename) ":" (number-to-string (line-number-at-pos))))
 
 (defun exunit-colorize-compilation-buffer ()
-  (toggle-read-only)
-  (ansi-color-apply-on-region compilation-filter-start (point))
-  (toggle-read-only))
+  (let ((inhibit-read-only t))
+    (ansi-color-apply-on-region compilation-filter-start (point))))
 
 (defvar exunit-compilation-error-regexp-alist-alist
   '((elixir-warning "warning: [^\n]*\n +\\([0-9A-Za-z@_./:-]+\\.exs?\\):\\([0-9]+\\)" 1 2 nil 1 1)
