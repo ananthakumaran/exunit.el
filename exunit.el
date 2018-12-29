@@ -78,8 +78,8 @@ on every call."
   "Convert FILENAME to absolute path.
 
 DEP may be a local dependency or umbrella dependency or a
-exception name.  This function checks for known constants values
-and the presence of the file in relative to dependency folder."
+exception name.  This function checks for known constant values
+and the presence of the file relative to dependency folder."
   (let ((project-name (exunit-project-name))
         (dep-file (s-join "/" (list "deps" dep filename)))
         (umbrella-app-file (s-join "/" (list exunit-project-root ".." dep filename)))
