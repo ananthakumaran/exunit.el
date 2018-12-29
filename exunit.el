@@ -147,13 +147,13 @@ and filename relative to the dependency."
 
 ;;;###autoload
 (defun exunit-verify-single ()
-  "Run all the tests in the current buffer."
+  "Run the test under the point."
   (interactive)
   (exunit-compile (list (exunit-test-filename-line-number))))
 
 ;;;###autoload
 (defun exunit-verify ()
-  "Run the test under the point."
+  "Run all the tests in the current buffer."
   (interactive)
   (exunit-compile (list (exunit-test-filename))))
 
