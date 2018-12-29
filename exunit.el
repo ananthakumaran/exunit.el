@@ -58,6 +58,10 @@ Each element should be a string of the form ENVVARNAME=VALUE."
 (exunit-def-permanent-buffer-local exunit-project-root nil)
 
 (defun exunit-project-root ()
+  "Return the current project root.
+
+This value is cached in a buffer local to avoid hitting the
+filesytem everytime"
   (or
    exunit-project-root
    (let ((root (locate-dominating-file default-directory "mix.exs")))
@@ -67,9 +71,15 @@ Each element should be a string of the form ENVVARNAME=VALUE."
      exunit-project-root)))
 
 (defun exunit-project-name ()
+  "Return the current project name."
   (file-name-nondirectory (directory-file-name (exunit-project-root))))
 
 (defun exunit-dependency-filename (dep filename)
+  "Convert FILENAME to absolute path.
+
+DEP may be a local dependency or umbrella dependency or a
+exception name.  This fuctions checks for known constants values
+and the presence of the file in relative to dependency folder."
   (let ((project-name (exunit-project-name))
         (dep-file (s-join "/" (list "deps" dep filename)))
         (umbrella-app-file (s-join "/" (list exunit-project-root ".." dep filename)))
@@ -84,6 +94,15 @@ Each element should be a string of the form ENVVARNAME=VALUE."
      (t filename))))
 
 (defun exunit-parse-error-filename (filename)
+  "Parse FILENAME in stacktrace.
+
+       (fdb) lib/fdb/transaction.ex:443: FDB.Transaction.set/4
+       (fdb) lib/fdb/database.ex:129: FDB.Database.do_transact/2
+       test/fdb/coder_test.exs:32: (test)
+
+The filenames in stacktrace are of two formats, one with the
+filename relative to project root, another with dependency name
+and filename relative to the dependency."
   (let ((match (s-match "(\\([^)]*\\)) \\(.*\\)" filename)))
     (if match
         (exunit-dependency-filename (nth 1 match) (nth 2 match))
@@ -111,6 +130,7 @@ Each element should be a string of the form ENVVARNAME=VALUE."
   (add-hook 'compilation-filter-hook 'exunit-colorize-compilation-buffer nil t))
 
 (defun exunit-compile (args)
+  "Run mix test with the given ARGS."
   (let ((default-directory (exunit-project-root))
         (compilation-environment exunit-environment))
     (compile
