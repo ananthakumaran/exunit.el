@@ -60,8 +60,8 @@ Each element should be a string of the form ENVVARNAME=VALUE."
 (defun exunit-project-root ()
   "Return the current project root.
 
-This value is cached in a buffer local to avoid hitting the
-filesytem everytime"
+This value is cached in a buffer local to avoid filesytem access
+on every call."
   (or
    exunit-project-root
    (let ((root (locate-dominating-file default-directory "mix.exs")))
@@ -78,7 +78,7 @@ filesytem everytime"
   "Convert FILENAME to absolute path.
 
 DEP may be a local dependency or umbrella dependency or a
-exception name.  This fuctions checks for known constants values
+exception name.  This fuction checks for known constants values
 and the presence of the file in relative to dependency folder."
   (let ((project-name (exunit-project-name))
         (dep-file (s-join "/" (list "deps" dep filename)))
