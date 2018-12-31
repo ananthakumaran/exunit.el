@@ -1,6 +1,6 @@
 # exunit
 
-A minor mode that provides commands to run
+Provides commands to run
 [ExUnit](https://hexdocs.pm/ex_unit/ExUnit.html) tests. The output is
 syntax highlighted and stacktraces are navigatable.
 

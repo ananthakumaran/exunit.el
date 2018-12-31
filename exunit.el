@@ -6,7 +6,7 @@
 ;; URL: http://github.com/ananthakumaran/exunit.el
 ;; Version: 0.1
 ;; Keywords: processes elixir exunit
-;; Package-Requires: ((dash "2.10.0") (s "1.11.0") (emacs "24.3"))
+;; Package-Requires: ((dash "2.10.0") (s "1.11.0") (emacs "24.3") (f "0.20.0"))
 
 ;; This program is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
@@ -25,13 +25,14 @@
 
 ;;; Commentary:
 
-;; A minor mode that provides commands to run ExUnit tests.  The output
-;; is properly syntax highlighted and stacktraces are navigatable
+;; Provides commands to run ExUnit tests.  The output is properly
+;; syntax highlighted and stacktraces are navigatable
 
 ;;; Code:
 
 (require 'dash)
 (require 's)
+(require 'f)
 (require 'ansi-color)
 (require 'compile)
 
@@ -48,14 +49,8 @@ Each element should be a string of the form ENVVARNAME=VALUE."
   :type '(repeat (string :tag "ENVVARNAME=VALUE"))
   :group 'exunit)
 
-(defmacro exunit-def-permanent-buffer-local (name &optional init-value)
-  "Declare NAME as buffer local variable."
-  `(progn
-     (defvar ,name ,init-value)
-     (make-variable-buffer-local ',name)
-     (put ',name 'permanent-local t)))
-
-(exunit-def-permanent-buffer-local exunit-project-root nil)
+(defvar-local exunit-project-root nil)
+(make-variable-buffer-local 'exunit-project-root)
 
 (defun exunit-project-root ()
   "Return the current project root.
@@ -67,8 +62,7 @@ on every call."
    (let ((root (locate-dominating-file default-directory "mix.exs")))
      (unless root
        (error "Couldn't locate project root folder.  Make sure the current file is inside a project"))
-     (setq exunit-project-root (expand-file-name root))
-     exunit-project-root)))
+     (setq exunit-project-root (expand-file-name root)))))
 
 (defun exunit-project-name ()
   "Return the current project name."
@@ -81,9 +75,9 @@ DEP may be a local dependency or umbrella dependency or a
 exception name.  This function checks for known constant values
 and the presence of the file relative to dependency folder."
   (let ((project-name (exunit-project-name))
-        (dep-file (s-join "/" (list "deps" dep filename)))
-        (umbrella-app-file (s-join "/" (list exunit-project-root ".." dep filename)))
-        (umbrella-dep-file (s-join "/" (list exunit-project-root ".." ".." "deps" dep filename))))
+        (dep-file (f-join "deps" dep filename))
+        (umbrella-app-file (f-join exunit-project-root ".." dep filename))
+        (umbrella-dep-file (f-join exunit-project-root ".." ".." "deps" dep filename)))
     (cond
      ((member dep '("elixir" "stdlib")) filename)
      ((s-ends-with? "Error" dep) filename)
@@ -156,10 +150,6 @@ and filename relative to the dependency."
   "Run all the tests in the current buffer."
   (interactive)
   (exunit-compile (list (exunit-test-filename))))
-
-(define-minor-mode exunit-mode
-  "Minor mode for ExUnit test runner"
-  :lighter " exunit")
 
 (provide 'exunit)
 
