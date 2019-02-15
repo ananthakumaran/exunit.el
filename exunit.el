@@ -4,6 +4,7 @@
 
 ;; Author: Anantha kumaran <ananthakumaran@gmail.com>
 ;; URL: http://github.com/ananthakumaran/exunit.el
+;; Package-Version: 20190106.610
 ;; Version: 0.1
 ;; Keywords: processes elixir exunit
 ;; Package-Requires: ((dash "2.10.0") (s "1.11.0") (emacs "24.3") (f "0.20.0"))
@@ -58,6 +59,9 @@ Each element should be a string of the form ENVVARNAME=VALUE."
 (defvar-local exunit-project-root nil)
 (make-variable-buffer-local 'exunit-project-root)
 
+(defvar-local exunit-umbrella-project-root nil)
+(make-variable-buffer-local 'exunit-umbrella-project-root)
+
 (defun exunit-project-root ()
   "Return the current project root.
 
@@ -69,6 +73,18 @@ on every call."
      (unless root
        (error "Couldn't locate project root folder.  Make sure the current file is inside a project"))
      (setq exunit-project-root (expand-file-name root)))))
+
+(defun exunit-umbrella-project-root ()
+  "Return the current project root.
+
+This value is cached in a buffer local to avoid filesytem access
+on every call."
+  (or
+   exunit-umbrella-project-root
+   (let ((root (locate-dominating-file default-directory "apps")))
+     (unless root
+       (error "Couldn't locate project root folder.  Make sure the current file is inside a project"))
+     (setq exunit-umbrella-project-root (expand-file-name root)))))
 
 (defun exunit-project-name ()
   "Return the current project name."
@@ -136,9 +152,9 @@ and filename relative to the dependency."
 
   (compile args 'exunit-compilation-mode))
 
-(defun exunit-compile (args)
+(defun exunit-compile (args &optional directory)
   "Run mix test with the given ARGS."
-  (let ((default-directory (exunit-project-root))
+  (let ((default-directory (or directory (exunit-project-root)))
         (compilation-environment exunit-environment))
     (exunit-do-compile
      (s-join " " (-concat '("mix" "test") exunit-mix-test-default-options args)))))
@@ -159,6 +175,11 @@ and filename relative to the dependency."
   "Run all the tests in the current project."
   (interactive)
   (exunit-compile '()))
+
+(defun exunit-verify-all-in-umbrella ()
+  "Run all the tests in the current umbrella project."
+  (interactive)
+  (exunit-compile '() (exunit-umbrella-project-root)))
 
 ;;;###autoload
 (defun exunit-verify-single ()
