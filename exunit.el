@@ -4,7 +4,6 @@
 
 ;; Author: Anantha kumaran <ananthakumaran@gmail.com>
 ;; URL: http://github.com/ananthakumaran/exunit.el
-;; Package-Version: 20190106.610
 ;; Version: 0.1
 ;; Keywords: processes elixir exunit
 ;; Package-Requires: ((dash "2.10.0") (s "1.11.0") (emacs "24.3") (f "0.20.0"))
