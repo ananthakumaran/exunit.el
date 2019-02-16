@@ -11,7 +11,7 @@ syntax highlighted and stacktraces are navigatable.
 Name                                      | Description
 ------------------------------------------|----------
 <kbd>exunit-verify-all</kbd>              | Run all the tests in the current project
-<kbd>exunit-verify-all-in-umbrella<kbd>   | Run all the tests in the current umbrella project
+<kbd>exunit-verify-all-in-umbrella</kbd>  | Run all the tests in the current umbrella project
 <kbd>exunit-verify</kbd>                  | Run all the tests in the current buffer
 <kbd>exunit-verify-single</kbd>           | Run the test under the point
 <kbd>exunit-rerun</kbd>                   | Re-run the last test invocation
