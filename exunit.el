@@ -74,7 +74,7 @@ on every call."
      (setq exunit-project-root (expand-file-name root)))))
 
 (defun exunit-umbrella-project-root ()
-  "Return the current project root.
+  "Return the current umbrella root.
 
 This value is cached in a buffer local to avoid filesytem access
 on every call."
@@ -82,7 +82,7 @@ on every call."
    exunit-umbrella-project-root
    (let ((root (locate-dominating-file default-directory "apps")))
      (unless root
-       (error "Couldn't locate project root folder.  Make sure the current file is inside a project"))
+       (error "Couldn't locate umbrella root folder.  Make sure the current file is inside a umbrella project"))
      (setq exunit-umbrella-project-root (expand-file-name root)))))
 
 (defun exunit-project-name ()
