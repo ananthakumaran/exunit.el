@@ -161,6 +161,11 @@ and filename relative to the dependency."
 ;;; Public
 
 ;;;###autoload
+(define-minor-mode exunit-mode
+  "Minor mode for ExUnit test runner"
+  :lighter " ExUnit")
+
+;;;###autoload
 (defun exunit-rerun ()
   "Re-run the last test invocation."
   (interactive)
@@ -175,6 +180,7 @@ and filename relative to the dependency."
   (interactive)
   (exunit-compile '()))
 
+;;;###autoload
 (defun exunit-verify-all-in-umbrella ()
   "Run all the tests in the current umbrella project."
   (interactive)
