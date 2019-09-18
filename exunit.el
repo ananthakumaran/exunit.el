@@ -260,9 +260,12 @@ If the file does not exist, display an error message."
 
 ;;;###autoload
 (defun exunit-verify ()
-  "Run all the tests in the current buffer."
+  "Run all the tests associated with the current buffer."
   (interactive)
-  (exunit-compile (list (exunit-test-filename))))
+  (let ((filename (exunit-test-filename)))
+    (exunit-compile (list (if (exunit-test-file-p filename)
+                              filename
+                            (exunit-test-for-file filename))))))
 
 ;;;###autoload
 (defun exunit-toggle-file-and-test ()

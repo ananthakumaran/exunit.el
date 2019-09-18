@@ -12,7 +12,7 @@ Name                                      | Description
 ------------------------------------------|----------
 <kbd>exunit-verify-all</kbd>              | Run all the tests in the current project
 <kbd>exunit-verify-all-in-umbrella</kbd>  | Run all the tests in the current umbrella project
-<kbd>exunit-verify</kbd>                  | Run all the tests in the current buffer
+<kbd>exunit-verify</kbd>                  | Run all the tests associated with the current buffer
 <kbd>exunit-verify-single</kbd>           | Run the test under the point
 <kbd>exunit-rerun</kbd>                   | Re-run the last test invocation
 <kbd>exunit-toggle-file-and-test</kbd>  | Toggle between a file and its tests in the current window
