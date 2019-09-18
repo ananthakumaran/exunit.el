@@ -6,7 +6,7 @@
 ;; URL: http://github.com/ananthakumaran/exunit.el
 ;; Version: 0.1
 ;; Keywords: processes elixir exunit
-;; Package-Requires: ((dash "2.10.0") (s "1.11.0") (emacs "24.3") (f "0.20.0"))
+;; Package-Requires: ((s "1.11.0") (emacs "24.3") (f "0.20.0"))
 
 ;; This program is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
@@ -30,7 +30,6 @@
 
 ;;; Code:
 
-(require 'dash)
 (require 's)
 (require 'f)
 (require 'ansi-color)
@@ -159,7 +158,7 @@ and filename relative to the dependency."
   (let ((default-directory (or directory (exunit-project-root)))
         (compilation-environment exunit-environment))
     (exunit-do-compile
-     (s-join " " (-concat '("mix" "test") exunit-mix-test-default-options args)))))
+     (s-join " " (append '("mix" "test") exunit-mix-test-default-options args)))))
 
 (defun exunit-test-file-p (file)
   "Return non-nil if FILE is an ExUnit test file."
