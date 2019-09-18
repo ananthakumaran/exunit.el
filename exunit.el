@@ -49,6 +49,11 @@ Each element should be a string of the form ENVVARNAME=VALUE."
   :type '(repeat (string :tag "ENVVARNAME=VALUE"))
   :group 'exunit)
 
+(defcustom exunit-prefer-async-tests nil
+  "Whether to generate async test modules."
+  :type 'boolean
+  :group 'exunit)
+
 (defvar exunit-last-directory nil
   "Directory the last mix test command ran in.")
 
@@ -158,6 +163,70 @@ and filename relative to the dependency."
     (exunit-do-compile
      (s-join " " (-concat '("mix" "test") exunit-mix-test-default-options args)))))
 
+(defun exunit-test-file-p (file)
+  "Return non-nil if FILE is an ExUnit test file."
+  (string-match-p "_test\\.exs$" file))
+
+(defun exunit-test-for-file (file)
+  "Return the test file for FILE."
+  (replace-regexp-in-string "^lib/\\(.*\\)\.ex$" "test/\\1_test.exs" file))
+
+(defun exunit-file-for-test (test-file)
+  "Return the file which is tested by TEST-FILE."
+  (replace-regexp-in-string "^test/\\(.*\\)_test\.exs$" "lib/\\1.ex" test-file))
+
+(defun exunit-open-test-file-for (file opener)
+  "Visit the test file for FILE using OPENER.
+
+If the file does not exist, prompt the user to create it."
+  (let ((filename (concat (exunit-project-root)
+                          (exunit-test-for-file file))))
+    (if (file-exists-p filename)
+        (funcall opener filename)
+      (if (y-or-n-p "No test file found; create one now? ")
+          (exunit-create-test-for-current-buffer filename opener)
+        (message "No test file found")))))
+
+(defun exunit-create-test-for-current-buffer (filename opener)
+  "Create a test module as FILENAME and visit it using OPENER.
+
+The module name given to the test module is determined from the name of the
+first module defined in the current buffer."
+  (let ((directory-name (file-name-directory filename))
+        (module-name (concat (exunit-buffer-module-name (current-buffer))
+                             "Test")))
+    (unless (file-exists-p directory-name)
+      (make-directory directory-name t))
+    (exunit-insert-test-boilerplate (funcall opener filename) module-name)))
+
+(defun exunit-buffer-module-name (buffer)
+  "Determine the name of the first module defined in BUFFER."
+  (save-excursion
+    (with-current-buffer buffer
+      (goto-char (point-min))
+      (re-search-forward "defmodule\\s-+\\(.+?\\),?\\s-+do")
+      (match-string 1))))
+
+(defun exunit-insert-test-boilerplate (buffer module-name)
+  "Insert ExUnit boilerplate for MODULE-NAME in BUFFER."
+  (with-current-buffer buffer
+    (insert (concat "defmodule " module-name " do\n"
+                    "  use ExUnit.Case" (and exunit-prefer-async-tests ", async: true") "\n\n\n"
+                    "end\n"))
+    (goto-char (point-min))
+    (beginning-of-line 4)
+    (indent-according-to-mode)))
+
+(defun exunit-open-file-for-test (test-file opener)
+  "Visit the file which is tested by TEST-FILE using OPENER.
+
+If the file does not exist, display an error message."
+  (let ((filename (concat (exunit-project-root)
+                          (exunit-file-for-test test-file))))
+    (if (file-exists-p filename)
+        (funcall opener filename)
+      (error "No source file found"))))
+
 ;;; Public
 
 ;;;###autoload
@@ -197,6 +266,24 @@ and filename relative to the dependency."
   "Run all the tests in the current buffer."
   (interactive)
   (exunit-compile (list (exunit-test-filename))))
+
+;;;###autoload
+(defun exunit-toggle-file-and-test ()
+  "Toggle between a file and its tests in the current window."
+  (interactive)
+  (let ((file (exunit-test-filename)))
+    (if (exunit-test-file-p file)
+        (exunit-open-file-for-test file #'find-file)
+      (exunit-open-test-file-for file #'find-file))))
+
+;;;###autoload
+(defun exunit-toggle-file-and-test-other-window ()
+  "Toggle between a file and its tests in other window."
+  (interactive)
+  (let ((file (exunit-test-filename)))
+    (if (exunit-test-file-p file)
+        (exunit-open-file-for-test file #'find-file-other-window)
+      (exunit-open-test-file-for file #'find-file-other-window))))
 
 (provide 'exunit)
 
