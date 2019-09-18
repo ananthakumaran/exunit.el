@@ -61,10 +61,8 @@ Each element should be a string of the form ENVVARNAME=VALUE."
   "Arguments passed to `exunit-do-compile' at the last invocation.")
 
 (defvar-local exunit-project-root nil)
-(make-variable-buffer-local 'exunit-project-root)
 
 (defvar-local exunit-umbrella-project-root nil)
-(make-variable-buffer-local 'exunit-umbrella-project-root)
 
 (defun exunit-project-root ()
   "Return the current project root.
