@@ -5,6 +5,15 @@
 Provides commands to run [[https://hexdocs.pm/ex_unit/ExUnit.html][ExUnit]] tests. The output is syntax
 highlighted and stacktraces are navigatable.
 
+* Setup
+
+exunit is available in [[https://melpa.org/#/exunit][melpa]] and can be installed via package-install
+command.
+
+#+begin_src emacs-lisp
+(add-hook 'elixir-mode-hook 'exunit-mode)
+#+end_src
+
 * Commands
 
 | Keyboard    | Description                                                                                                   |
