@@ -37,6 +37,15 @@
 
 ;;; Private
 
+(define-prefix-command 'exunit-mode-keymap)
+(define-key exunit-mode-keymap (kbd "a") 'exunit-verify-all)
+(define-key exunit-mode-keymap (kbd "s") 'exunit-verify-single)
+(define-key exunit-mode-keymap (kbd "v") 'exunit-verify)
+(define-key exunit-mode-keymap (kbd "r") 'exunit-rerun)
+(define-key exunit-mode-keymap (kbd "u") 'exunit-verify-all-in-umbrella)
+(define-key exunit-mode-keymap (kbd "t") 'exunit-toggle-file-and-test)
+(define-key exunit-mode-keymap (kbd "4 t") 'exunit-toggle-file-and-test-other-window)
+
 (defcustom exunit-mix-test-default-options '()
   "List of options that gets passed to the mix test command."
   :type '(repeat string)
@@ -51,6 +60,11 @@ Each element should be a string of the form ENVVARNAME=VALUE."
 (defcustom exunit-prefer-async-tests nil
   "Whether to generate async test modules."
   :type 'boolean
+  :group 'exunit)
+
+(defcustom exunit-key-command-prefix  (kbd "C-c ,")
+  "The prefix for all exunit related key commands."
+  :type 'string
   :group 'exunit)
 
 (defvar exunit-last-directory nil
@@ -229,7 +243,7 @@ If the file does not exist, display an error message."
 ;;;###autoload
 (define-minor-mode exunit-mode
   "Minor mode for ExUnit test runner"
-  :lighter " ExUnit")
+  :lighter " ExUnit" :keymap `((,exunit-key-command-prefix . exunit-mode-keymap)))
 
 ;;;###autoload
 (defun exunit-rerun ()

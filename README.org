@@ -1,0 +1,22 @@
+#+TITLE: exunit
+
+[[https://melpa.org/#/exunit][https://melpa.org/packages/exunit-badge.svg]]
+
+Provides commands to run [[https://hexdocs.pm/ex_unit/ExUnit.html][ExUnit]] tests. The output is syntax
+highlighted and stacktraces are navigatable.
+
+* Commands
+
+| Keyboard    | Description                                                                                                   |
+|-------------+---------------------------------------------------------------------------------------------------------------|
+| =C-c , a=   | *exunit-verify-all* Run all the tests in the current project                                                   |
+| =C-c , u=   | *exunit-verify-all-in-umbrella* Run all the tests in the current umbrella project                              |
+| =C-c , v=   | *exunit-verify* Run all the tests in the current buffer, or the test file corresponding to the current buffer  |
+| =C-c , s=   | *exunit-verify-single* Run the test under the point                                                            |
+| =C-c , r=   | *exunit-rerun* Re-run the last test invocation                                                                 |
+| =C-c , t=   | *exunit-toggle-file-and-test* Toggle between a file and its tests in the current window                        |
+| =C-c , 4 t= | *exunit-toggle-file-and-test-other-window* Toggle between a file and its tests in other window                 |
+
+
+
+[[https://raw.githubusercontent.com/ananthakumaran/exunit.el/master/screenshots/sample.png]]
