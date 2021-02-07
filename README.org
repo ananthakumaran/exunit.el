@@ -18,13 +18,14 @@ command.
 
 | Keyboard    | Description                                                                                                   |
 |-------------+---------------------------------------------------------------------------------------------------------------|
-| =C-c , a=   | *exunit-verify-all* Run all the tests in the current project                                                   |
-| =C-c , u=   | *exunit-verify-all-in-umbrella* Run all the tests in the current umbrella project                              |
-| =C-c , v=   | *exunit-verify* Run all the tests in the current buffer, or the test file corresponding to the current buffer  |
-| =C-c , s=   | *exunit-verify-single* Run the test under the point                                                            |
-| =C-c , r=   | *exunit-rerun* Re-run the last test invocation                                                                 |
-| =C-c , t=   | *exunit-toggle-file-and-test* Toggle between a file and its tests in the current window                        |
-| =C-c , 4 t= | *exunit-toggle-file-and-test-other-window* Toggle between a file and its tests in other window                 |
+| =C-c , a=   | *exunit-verify-all* Run all the tests in the current project                                                  |
+| =C-c , u=   | *exunit-verify-all-in-umbrella* Run all the tests in the current umbrella project                             |
+| =C-c , v=   | *exunit-verify* Run all the tests in the current buffer, or the test file corresponding to the current buffer |
+| =C-c , s=   | *exunit-verify-single* Run the test under the point                                                           |
+| =C-c , r=   | *exunit-rerun* Re-run the last test invocation                                                                |
+| =C-c , t=   | *exunit-toggle-file-and-test* Toggle between a file and its tests in the current window                       |
+| =C-c , d=   | *exunit-debug* Run the test under the point in IEx shell. Supports IEx.pry method for debugging.              |
+| =C-c , 4 t= | *exunit-toggle-file-and-test-other-window* Toggle between a file and its tests in other window                |
 
 
 

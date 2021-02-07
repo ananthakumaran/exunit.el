@@ -41,6 +41,7 @@
 (define-key exunit-mode-keymap (kbd "a") 'exunit-verify-all)
 (define-key exunit-mode-keymap (kbd "s") 'exunit-verify-single)
 (define-key exunit-mode-keymap (kbd "v") 'exunit-verify)
+(define-key exunit-mode-keymap (kbd "d") 'exunit-debug)
 (define-key exunit-mode-keymap (kbd "r") 'exunit-rerun)
 (define-key exunit-mode-keymap (kbd "u") 'exunit-verify-all-in-umbrella)
 (define-key exunit-mode-keymap (kbd "t") 'exunit-toggle-file-and-test)
@@ -167,12 +168,29 @@ and filename relative to the dependency."
 
   (compile args 'exunit-compilation-mode))
 
+(define-derived-mode exunit-iex-mode comint-mode "IEx"
+  "ExUnit IEx comint mode."
+  (setq-local comint-scroll-show-maximum-output nil)
+  (compilation-shell-minor-mode)
+  (add-hook 'compilation-filter-hook 'exunit-colorize-compilation-buffer nil t))
+
+(defun exunit-do-comint (args)
+  "Run command in comint mode."
+  (pop-to-buffer (compile args 'exunit-iex-mode)))
+
 (defun exunit-compile (args &optional directory)
   "Run mix test with the given ARGS."
   (let ((default-directory (or directory (exunit-project-root)))
         (compilation-environment exunit-environment))
     (exunit-do-compile
      (s-join " " (append '("mix" "test") exunit-mix-test-default-options args)))))
+
+(defun exunit-comint (args &optional directory)
+  "Run mix test in iex shell with the given ARGS."
+  (let ((default-directory (or directory (exunit-project-root)))
+        (compilation-environment exunit-environment))
+    (exunit-do-comint
+     (s-join " " (append '("iex" "-S" "mix" "test" "--trace") exunit-mix-test-default-options args)))))
 
 (defun exunit-test-file-p (file)
   "Return non-nil if FILE is an ExUnit test file."
@@ -271,6 +289,14 @@ If the file does not exist, display an error message."
   "Run the test under the point."
   (interactive)
   (exunit-compile (list (exunit-test-filename-line-number))))
+
+;;;###autoload
+(defun exunit-debug ()
+  "Run the test under the point in IEx shell.
+
+This allows the usage of IEx.pry method for debugging."
+  (interactive)
+  (exunit-comint (list (exunit-test-filename-line-number))))
 
 ;;;###autoload
 (defun exunit-verify ()
