@@ -29,6 +29,6 @@ command.
 
 Invoking any of these commands with a prefix argument =C-u= will
 cause a prompt to be shown for additional arguments before the
-test(s)are run.
+test(s) are run.
 
 [[https://raw.githubusercontent.com/ananthakumaran/exunit.el/master/screenshots/sample.png]]
