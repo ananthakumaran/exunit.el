@@ -181,7 +181,10 @@ and filename relative to the dependency."
 (defun exunit-compile (args &optional directory)
   "Run mix test with the given ARGS."
   (let ((default-directory (or directory (exunit-project-root)))
-        (compilation-environment exunit-environment))
+        (compilation-environment exunit-environment)
+        (args (if current-prefix-arg
+                  `(,(read-from-minibuffer "Args: " (s-join " " args) nil nil 'exunit-arguments))
+                args)))
     (exunit-do-compile
      (s-join " " (append '("mix" "test") exunit-mix-test-default-options args)))))
 
