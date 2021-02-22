@@ -27,6 +27,8 @@ command.
 | =C-c , d=   | *exunit-debug* Run the test under the point in IEx shell. Supports IEx.pry method for debugging.              |
 | =C-c , 4 t= | *exunit-toggle-file-and-test-other-window* Toggle between a file and its tests in other window                |
 
-
+Invoking any of these commands with a prefix argument (`C-u`) will
+cause a prompt to be shown for additional arguments before the test(s)
+are run.
 
 [[https://raw.githubusercontent.com/ananthakumaran/exunit.el/master/screenshots/sample.png]]
