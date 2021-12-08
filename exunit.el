@@ -35,10 +35,11 @@
 (require 'ansi-color)
 (require 'compile)
 (require 'transient)
+(require 'subr-x)
 
 ;;; Private
 
-(define-transient-command exunit-transient ()
+(transient-define-prefix exunit-transient ()
   "ExUnit"
   ["Arguments"
    [("-f" "Failed" "--failed")
@@ -191,7 +192,7 @@ and filename relative to the dependency."
   "Run mix test with the given ARGS."
   (let ((default-directory (or directory (exunit-project-root)))
         (compilation-environment exunit-environment)
-        (args (-if-let (infixes (transient-args 'exunit-transient))
+        (args (if-let (infixes (transient-args 'exunit-transient))
                   (append infixes args)
                 args)))
     (exunit-do-compile
