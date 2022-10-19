@@ -57,6 +57,18 @@
    [("t" "toggle file and test" exunit-toggle-file-and-test)
     ("4 t" "toggle other window" exunit-toggle-file-and-test-other-window)]])
 
+(defcustom exunit-mix-command '("mix" "test")
+  "List of commands used to run the mix tool."
+  :type '(repeat string)
+  :group 'exunit
+  :safe #'listp)
+
+(defcustom exunit-comint-command '("iex" "-S" "mix" "test" "--trace")
+  "List of commands used to run the comint buffer."
+  :type '(repeat string)
+  :group 'exunit
+  :safe #'listp)
+
 (defcustom exunit-mix-test-default-options '()
   "List of options that gets passed to the mix test command."
   :type '(repeat string)
@@ -196,14 +208,14 @@ and filename relative to the dependency."
                   (append infixes args)
                 args)))
     (exunit-do-compile
-     (s-join " " (append '("mix" "test") exunit-mix-test-default-options args)))))
+     (s-join " " (append exunit-mix-command exunit-mix-test-default-options args)))))
 
 (defun exunit-comint (args &optional directory)
   "Run mix test in iex shell with the given ARGS."
   (let ((default-directory (or directory (exunit-project-root)))
         (compilation-environment exunit-environment))
     (exunit-do-comint
-     (s-join " " (append '("iex" "-S" "mix" "test" "--trace") exunit-mix-test-default-options args)))))
+     (s-join " " (append exunit-comint-command exunit-mix-test-default-options args)))))
 
 (defun exunit-test-file-p (file)
   "Return non-nil if FILE is an ExUnit test file."
