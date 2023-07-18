@@ -32,3 +32,17 @@ cause a prompt to be shown for additional arguments before the
 test(s) are run.
 
 [[https://raw.githubusercontent.com/ananthakumaran/exunit.el/master/screenshots/sample.png]]
+
+* Run tests in a docker
+
+For example, you can redefine an `exunit-mix-command` to the following to execute in `backend` service context:
+
+```lisp
+(setq exunit-mix-command
+      (lambda (args)
+        (let* ((args (s-join " " args))
+               (mix-command (concat "'mix test " args "'")))
+          ;; Adjust to your needs
+          (list "docker-compose" "exec" "backend" "sh" "-c" mix-command))))
+
+```
