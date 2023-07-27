@@ -37,12 +37,11 @@ test(s) are run.
 
 For example, you can redefine an `exunit-mix-command` to the following to execute in `backend` service context:
 
-```lisp
+#+begin_src emacs-lisp
 (setq exunit-mix-command
       (lambda (args)
         (let* ((args (s-join " " args))
                (mix-command (concat "'mix test " args "'")))
           ;; Adjust to your needs
           (list "docker-compose" "exec" "backend" "sh" "-c" mix-command))))
-
-```
+#+end_src
