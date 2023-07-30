@@ -35,7 +35,7 @@ test(s) are run.
 
 * Run tests in a docker
 
-For example, you can redefine an `exunit-mix-command` to the following to execute in `backend` service context:
+For example, you can redefine an =exunit-mix-command= to the following to execute in =backend= service context:
 
 #+begin_src emacs-lisp
 (setq exunit-mix-command

@@ -46,7 +46,8 @@
     ("-s" "Stale" "--stale")
     ("-t" "Trace" "--trace")
     ("-c" "Coverage" "--cover")]
-   [("-z" "Slowest" "--slowest=10")]]
+   [("-z" "Slowest" "--slowest=10")
+    ("-m" "Fail Fast" "--max-failures=1")]]
   ["Actions"
    [("a" "all" exunit-verify-all)
     ("v" "current buffer" exunit-verify)]
