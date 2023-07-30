@@ -61,13 +61,13 @@
   "A command used to run the mix tool. Represented as list or function."
   :type '(choice (repeat string) function)
   :group 'exunit
-  :safe #'exunit-command-safe)
+  :risky t)
 
 (defcustom exunit-comint-command '("iex" "-S" "mix" "test" "--trace")
   "A command used to run the comint buffer. Represented as list or function."
   :type '(choice (repeat string) function)
   :group 'exunit
-  :safe #'exunit-command-safe)
+  :risky t)
 
 (defcustom exunit-mix-test-default-options '()
   "List of options that gets passed to the mix test command."
@@ -205,8 +205,8 @@ and filename relative to the dependency."
 
 To get a string representation of a command to pass to a compilation phase."
   (let ((command (if (functionp command-list-or-func)
-                         (funcall command-list-or-func args)
-                       (append command-list-or-func args))))
+                     (funcall command-list-or-func args)
+                   (append command-list-or-func args))))
     (s-join " " command)))
 
 (defun exunit-compile (args &optional directory)
@@ -289,13 +289,6 @@ If the file does not exist, display an error message."
     (if (file-exists-p filename)
         (funcall opener filename)
       (error "No source file found"))))
-
-(defun exunit-command-safe (value)
-  "Validate the value of exunit-mix-command/exunit-comint-command variables."
-  (cond
-   ((listp value) value) ; If the value is a list, return it as is.
-   ((functionp value) value) ; If the value is a function, return it as is.
-   (t (error "Invalid value for exunit-mix-command. Must be a list or a function."))))
 
 ;;; Public
 
