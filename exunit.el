@@ -58,16 +58,16 @@
     ("4 t" "toggle other window" exunit-toggle-file-and-test-other-window)]])
 
 (defcustom exunit-mix-command '("mix" "test")
-  "List of commands used to run the mix tool."
-  :type '(repeat string)
+  "A command used to run the mix tool. Represented as list or function."
+  :type '(choice (repeat string) function)
   :group 'exunit
-  :safe #'listp)
+  :risky t)
 
 (defcustom exunit-comint-command '("iex" "-S" "mix" "test" "--trace")
-  "List of commands used to run the comint buffer."
-  :type '(repeat string)
+  "A command used to run the comint buffer. Represented as list or function."
+  :type '(choice (repeat string) function)
   :group 'exunit
-  :safe #'listp)
+  :risky t)
 
 (defcustom exunit-mix-test-default-options '()
   "List of options that gets passed to the mix test command."
@@ -200,22 +200,31 @@ and filename relative to the dependency."
   "Run command in comint mode."
   (pop-to-buffer (compile args 'exunit-iex-mode)))
 
+(defun exunit-build-command (command-list-or-func args)
+  "Combines exunit-comint-command or exunit-comint-command with arguments.
+
+To get a string representation of a command to pass to a compilation phase."
+  (let ((command (if (functionp command-list-or-func)
+                     (funcall command-list-or-func args)
+                   (append command-list-or-func args))))
+    (s-join " " command)))
+
 (defun exunit-compile (args &optional directory)
   "Run mix test with the given ARGS."
-  (let ((default-directory (or directory (exunit-project-root)))
-        (compilation-environment exunit-environment)
-        (args (if-let (infixes (transient-args 'exunit-transient))
-                  (append infixes args)
-                args)))
-    (exunit-do-compile
-     (s-join " " (append exunit-mix-command exunit-mix-test-default-options args)))))
+  (let* ((default-directory (or directory (exunit-project-root)))
+         (compilation-environment exunit-environment)
+         (args (if-let (infixes (transient-args 'exunit-transient))
+                   (append infixes args)
+                 args))
+         (args (append exunit-mix-test-default-options args)))
+    (exunit-do-compile (exunit-build-command exunit-mix-command args))))
 
 (defun exunit-comint (args &optional directory)
   "Run mix test in iex shell with the given ARGS."
-  (let ((default-directory (or directory (exunit-project-root)))
-        (compilation-environment exunit-environment))
-    (exunit-do-comint
-     (s-join " " (append exunit-comint-command exunit-mix-test-default-options args)))))
+  (let* ((default-directory (or directory (exunit-project-root)))
+         (compilation-environment exunit-environment)
+         (args (append exunit-mix-test-default-options args)))
+    (exunit-do-comint (exunit-build-command exunit-comint-command args))))
 
 (defun exunit-test-file-p (file)
   "Return non-nil if FILE is an ExUnit test file."
