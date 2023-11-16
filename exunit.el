@@ -39,13 +39,21 @@
 
 ;;; Private
 
+(transient-define-infix exunit-transient:--exclude ()
+  :description "Exclude"
+  :class 'transient-option
+  :multi-value 'repeat
+  :shortarg "-e"
+  :argument "--exclude=")
+
 (transient-define-prefix exunit-transient ()
   "ExUnit"
   ["Arguments"
    [("-f" "Failed" "--failed")
     ("-s" "Stale" "--stale")
     ("-t" "Trace" "--trace")
-    ("-c" "Coverage" "--cover")]
+    ("-c" "Coverage" "--cover")
+    (exunit-transient:--exclude)]
    [("-z" "Slowest" "--slowest=10")
     ("-m" "Fail Fast" "--max-failures=1")]]
   ["Actions"
