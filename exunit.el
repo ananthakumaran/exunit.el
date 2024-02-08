@@ -53,7 +53,7 @@
     ("-s" "Stale" "--stale")
     ("-t" "Trace" "--trace")
     ("-c" "Coverage" "--cover")
-    (exunit-transient:--exclude)]
+    (exunit-transient:--exclude :level 5)]
    [("-z" "Slowest" "--slowest=10")
     ("-m" "Fail Fast" "--max-failures=1")]]
   ["Actions"

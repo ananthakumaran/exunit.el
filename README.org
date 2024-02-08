@@ -12,7 +12,12 @@ command.
 
 #+begin_src emacs-lisp
 (add-hook 'elixir-mode-hook 'exunit-mode)
+
+;; Optionally configure `transient-default-level' to 5 to show extra switches
+(setq transient-default-level 5) ;; default is 4
 #+end_src
+
+Currently, the only extra switch that is shown is `--exclude`.
 
 * Commands
 
