@@ -46,6 +46,13 @@
   :shortarg "-e"
   :argument "--exclude=")
 
+(transient-define-infix exunit-transient:--include ()
+  :description "Include"
+  :class 'transient-option
+  :multi-value 'repeat
+  :shortarg "-i"
+  :argument "--include=")
+
 (transient-define-prefix exunit-transient ()
   "ExUnit"
   ["Arguments"
@@ -53,7 +60,8 @@
     ("-s" "Stale" "--stale")
     ("-t" "Trace" "--trace")
     ("-c" "Coverage" "--cover")
-    (exunit-transient:--exclude :level 5)]
+    (exunit-transient:--exclude :level 5)
+    (exunit-transient:--include :level 5)]
    [("-z" "Slowest" "--slowest=10")
     ("-m" "Fail Fast" "--max-failures=1")]]
   ["Actions"
