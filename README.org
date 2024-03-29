@@ -18,7 +18,7 @@ command.
 (setq transient-default-level 5) ;; default is 4
 #+end_src
 
-Currently, the only extra switch that is shown is =--exclude=.
+Currently, 2 extra switches are shown, =--exclude= and =--include=.
 
 * Commands
 
