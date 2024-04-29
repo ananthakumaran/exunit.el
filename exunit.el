@@ -6,7 +6,7 @@
 ;; URL: http://github.com/ananthakumaran/exunit.el
 ;; Version: 0.1
 ;; Keywords: processes elixir exunit
-;; Package-Requires: ((s "1.11.0") (emacs "24.3") (f "0.20.0") (transient "0.3.6"))
+;; Package-Requires: ((s "1.11.0") (emacs "24.3") (f "0.20.0") (transient "0.3.6") (project "0.9.8"))
 
 ;; This program is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@
 (require 'compile)
 (require 'transient)
 (require 'subr-x)
+(require 'project)
 
 ;;; Private
 
