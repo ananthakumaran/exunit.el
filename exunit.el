@@ -197,7 +197,12 @@ and filename relative to the dependency."
 
 (define-compilation-mode exunit-compilation-mode "ExUnit Compilation"
   "Compilation mode for ExUnit output."
-  (setq compilation-parse-errors-filename-function #'exunit-parse-error-filename)
+  (setq compilation-parse-errors-filename-function #'exunit-parse-error-filename
+        compilation-buffer-name-function
+        (lambda (compilation-mode)
+          (if (project-current)
+              (concat "*" (downcase compilation-mode) "-" (project-name (project-current)) "*")
+            (compilation--default-buffer-name compilation-mode))))
   (add-hook 'compilation-filter-hook 'exunit-colorize-compilation-buffer nil t))
 
 (defun exunit-do-compile (args)
