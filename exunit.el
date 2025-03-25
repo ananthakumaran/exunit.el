@@ -54,6 +54,12 @@
   :shortarg "-i"
   :argument "--include=")
 
+(transient-define-infix exunit-transient:--seed ()
+  :description "Seed"
+  :class 'transient-option
+  :shortarg "-S"
+  :argument "--seed=")
+
 (transient-define-prefix exunit-transient ()
   "ExUnit"
   ["Arguments"
@@ -62,7 +68,8 @@
     ("-t" "Trace" "--trace")
     ("-c" "Coverage" "--cover")
     (exunit-transient:--exclude :level 5)
-    (exunit-transient:--include :level 5)]
+    (exunit-transient:--include :level 5)
+    (exunit-transient:--seed :level 5)]
    [("-z" "Slowest" "--slowest=10")
     ("-m" "Fail Fast" "--max-failures=1")]]
   ["Actions"
