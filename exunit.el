@@ -60,6 +60,12 @@
   :shortarg "-S"
   :argument "--seed=")
 
+(transient-define-infix exunit-transient:--repeat-until-failure ()
+  :description "Repeat until failure"
+  :class 'transient-option
+  :shortarg "-R"
+  :argument "--repeat-until-failure=")
+
 (transient-define-prefix exunit-transient ()
   "ExUnit"
   ["Arguments"
@@ -69,7 +75,8 @@
     ("-c" "Coverage" "--cover")
     (exunit-transient:--exclude :level 5)
     (exunit-transient:--include :level 5)
-    (exunit-transient:--seed :level 5)]
+    (exunit-transient:--seed :level 5)
+    (exunit-transient:--repeat-until-failure :level 5)]
    [("-z" "Slowest" "--slowest=10")
     ("-m" "Fail Fast" "--max-failures=1")]]
   ["Actions"
