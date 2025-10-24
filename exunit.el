@@ -66,6 +66,12 @@
   :shortarg "-R"
   :argument "--repeat-until-failure=")
 
+(transient-define-infix exunit-transient:--max-cases ()
+  :description "Maximum number of tests running asynchronously."
+  :class 'transient-option
+  :shortarg "-C"
+  :argument "--max-cases=")
+
 (transient-define-prefix exunit-transient ()
   "ExUnit"
   ["Arguments"
@@ -76,7 +82,8 @@
     (exunit-transient:--exclude :level 5)
     (exunit-transient:--include :level 5)
     (exunit-transient:--seed :level 5)
-    (exunit-transient:--repeat-until-failure :level 5)]
+    (exunit-transient:--repeat-until-failure :level 5)
+    (exunit-transient:--max-cases :level 5)]
    [("-z" "Slowest" "--slowest=10")
     ("-m" "Fail Fast" "--max-failures=1")]]
   ["Actions"
