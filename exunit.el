@@ -257,7 +257,7 @@ To get a string representation of a command to pass to a compilation phase."
   "Run mix test with the given ARGS."
   (let* ((default-directory (or directory (exunit-project-root)))
          (compilation-environment exunit-environment)
-         (args (if-let (infixes (transient-args 'exunit-transient))
+         (args (if-let* ((infixes (transient-args 'exunit-transient)))
                    (append infixes args)
                  args))
          (args (append exunit-mix-test-default-options args)))
