@@ -219,20 +219,24 @@ and filename relative to the dependency."
 
 (define-compilation-mode exunit-compilation-mode "ExUnit Compilation"
   "Compilation mode for ExUnit output."
-  (setq compilation-parse-errors-filename-function #'exunit-parse-error-filename
-        compilation-buffer-name-function
-        (lambda (compilation-mode)
-          (if (project-current)
-              (concat "*" (downcase compilation-mode) "-" (project-name (project-current)) "*")
-            (compilation--default-buffer-name compilation-mode))))
+  (setq compilation-parse-errors-filename-function #'exunit-parse-error-filename)
   (add-hook 'compilation-filter-hook 'exunit-colorize-compilation-buffer nil t))
+
+(defun exunit-compilation-buffer-name (compilation-mode)
+  "Include project name after COMPILATION-MODE in buffer name if available."
+  (if (project-current)
+      (concat "*" (downcase compilation-mode) "-" (project-name (project-current)) "*")
+    (compilation--default-buffer-name compilation-mode)))
 
 (defun exunit-do-compile (args)
   "Run compile and save the ARGS for future invocation."
   (setq exunit-last-directory default-directory
         exunit-last-arguments args)
 
-  (compile args 'exunit-compilation-mode))
+  ;; The value of compilation-buffer-name-function is remembered for the
+  ;; buffer, so dynamically binding it is enough.
+  (let ((compilation-buffer-name-function #'exunit-compilation-buffer-name))
+    (compile args 'exunit-compilation-mode)))
 
 (define-derived-mode exunit-iex-mode comint-mode "IEx"
   "ExUnit IEx comint mode."
